@@ -1,0 +1,3 @@
+# Claim 1 source audit
+
+Section 4 rules (i)-(v) define external lines, cubic interactions, Gaussian propagators and six selection rules, quartic `D/F/A/B` vertices plus quadratic mean-correction vertices, and the multiplication/summation translation. Theorem 1 (`theoremone`) says these rules uniquely determine the `D/F/A/B` layer recursions at order `1/n`. Equation `eq:F` is the explicit algebraic target and the two diagrams below the theorem are the worked graphical derivation. The main-text claim is finite-order and concerns MLP NTK cumulants; the broader all-orders theorem is not silently folded into this contract.

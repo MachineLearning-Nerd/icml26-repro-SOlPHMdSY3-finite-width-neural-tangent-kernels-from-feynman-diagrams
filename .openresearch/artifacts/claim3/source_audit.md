@@ -1,0 +1,3 @@
+# Claim 3 source audit
+
+Theorem 5 states: “For scale-invariant activation functions, the diagonal component of the NTK mean does not acquire any finite-width corrections.” Appendix G extends the first-order five-diagram cancellation to arbitrary order in `1/n`. Appendix B fixes the actual network assumptions: bias-free MLP preactivations with iid Gaussian weights in NTK parametrization. “Scale-invariant” is positive homogeneity, `sigma(lambda z)=lambda sigma(z)` for `lambda>0`; ReLU and LeakyReLU are named examples. The theorem is about the ensemble mean diagonal, not zero finite-sample Monte Carlo error and not off-diagonal entries.

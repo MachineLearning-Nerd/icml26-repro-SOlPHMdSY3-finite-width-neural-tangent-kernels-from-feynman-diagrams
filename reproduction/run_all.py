@@ -9,8 +9,26 @@ import subprocess
 import sys
 import time
 
+from reproduction.claim1_verifier import independent_check as check_claim1
+from reproduction.claim1_verifier import verify as verify_claim1
 from reproduction.claim2_independent_checker import check
 from reproduction.claim2_verifier import verify
+from reproduction.claim3_independent_checker import check as check_claim3
+from reproduction.claim3_verifier import symbolic_certificate
+
+
+def cgroup_cpu_metadata() -> dict:
+    result = {}
+    cpu_max = Path("/sys/fs/cgroup/cpu.max")
+    if cpu_max.exists():
+        quota, period = cpu_max.read_text().strip().split()
+        result["cpu_max_raw"] = f"{quota} {period}"
+        result["quota_cpu_count"] = None if quota == "max" else int(quota) / int(period)
+    cpuset = Path("/sys/fs/cgroup/cpuset.cpus.effective")
+    if cpuset.exists():
+        value = cpuset.read_text().strip()
+        result["cpuset_cpus_effective"] = value
+    return result
 
 
 def cpu_metadata() -> dict:
@@ -29,27 +47,33 @@ def cpu_metadata() -> dict:
         "python": platform.python_version(),
         "nvidia_smi_present": shutil.which("nvidia-smi") is not None,
         "cuda_visible_devices_name_present": "CUDA_VISIBLE_DEVICES" in os.environ,
+        "cgroup": cgroup_cpu_metadata(),
     }
 
 
-def main() -> int:
-    started = time.perf_counter()
-    certificate = verify()
-    independent = check(certificate)
-    control = subprocess.run(
-        [sys.executable, "-m", "reproduction.claim2_negative_control"],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    negative_control = {
-        "command": "python -m reproduction.claim2_negative_control",
+def run_expected_failure(module: str) -> dict:
+    command = [sys.executable, "-m", module]
+    control = subprocess.run(command, check=False, capture_output=True, text=True)
+    return {
+        "command": f"python -m {module}",
         "expected_exit": "nonzero",
         "actual_exit": control.returncode,
         "passed": control.returncode != 0,
         "stdout": control.stdout.strip(),
         "stderr": control.stderr.strip(),
     }
+
+
+def main() -> int:
+    started = time.perf_counter()
+    claim1 = verify_claim1()
+    claim1_independent = check_claim1(claim1)
+    certificate = verify()
+    independent = check(certificate)
+    negative_control = run_expected_failure("reproduction.claim2_negative_control")
+    claim3 = symbolic_certificate()
+    claim3_independent = check_claim3()
+    claim3_negative = run_expected_failure("reproduction.claim3_negative_control")
     elapsed = time.perf_counter() - started
     result = {
         "schema_version": 1,
@@ -63,12 +87,24 @@ def main() -> int:
         "seeds": [],
         "cpu": cpu_metadata(),
         "runtime_seconds": elapsed,
+        "claim1_verifier": claim1,
+        "claim1_independent_checker": claim1_independent,
         "claim2_verifier": certificate,
         "claim2_independent_checker": independent,
         "claim2_negative_control": negative_control,
+        "claim3_verifier": claim3,
+        "claim3_independent_checker": claim3_independent,
+        "claim3_negative_control": claim3_negative,
     }
     result["passed"] = (
-        certificate["passed"] and independent["passed"] and negative_control["passed"]
+        claim1["passed"]
+        and claim1_independent["passed"]
+        and certificate["passed"]
+        and independent["passed"]
+        and negative_control["passed"]
+        and claim3["passed"]
+        and claim3_independent["passed"]
+        and claim3_negative["passed"]
     )
     Path(".openresearch/runtime").mkdir(parents=True, exist_ok=True)
     Path(".openresearch/runtime/latest.json").write_text(
@@ -77,7 +113,8 @@ def main() -> int:
     print("OPENRESEARCH_EVIDENCE_BEGIN")
     print(json.dumps(result, indent=2, sort_keys=True))
     print("OPENRESEARCH_EVIDENCE_END")
-    print(f"SUMMARY claim2={'VERIFIED' if result['passed'] else 'BLOCKED'}")
+    status = "VERIFIED" if result["passed"] else "BLOCKED"
+    print(f"SUMMARY claim1={status} claim2={status} claim3={status}")
     return 0 if result["passed"] else 1
 
 

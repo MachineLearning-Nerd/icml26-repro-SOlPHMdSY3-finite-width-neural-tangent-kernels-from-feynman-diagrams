@@ -1,0 +1,8 @@
+{
+  "claim_id": 3,
+  "paper_statement": "For scale-invariant activation functions, the diagonal component of the NTK mean does not acquire any finite-width corrections.",
+  "quantifier": "For every scalar sigma satisfying sigma(lambda z)=lambda sigma(z) for lambda>0, every k>=1, and every finite layer depth, the order-1/n^k correction is zero on x=x.",
+  "assumptions": ["bias-free MLP", "NTK parametrization", "iid centered Gaussian weights", "finite depth", "diagonal input pair x=x"],
+  "pass_condition": "A machine-checkable algebraic induction proves the all-orders statement for arbitrary two-sided slopes; ReLU and LeakyReLU are explicit instances; independent Gaussian quadrature matches the required identities; GeLU fails the K-independence invariant as a negative control.",
+  "source": {"arxiv": "2508.11522v4", "anchors": ["S5.SS3", "S5.E20", "S5.E21"], "latex_labels": ["theoremfive", "absence-NTK-corrections-ReLU"], "source_tar_sha256": "5237b9fec2f128b23266771acbc8e44837619d5309cd32840ce537071b64c47f"}
+}
