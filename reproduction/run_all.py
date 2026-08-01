@@ -21,6 +21,7 @@ from reproduction.claim4_gelu import run_gelu_correction
 from reproduction.claim4_independent_checker import check as check_claim4
 from reproduction.claim5_independent_checker import check as check_claim5
 from reproduction.claim5_stability import run_paper_scale
+from reproduction.release_artifacts import build_release_artifacts
 
 
 def cgroup_cpu_metadata() -> dict:
@@ -122,6 +123,8 @@ def main() -> int:
         "claim5_independent_checker": claim5_independent,
         "claim5_verifier": claim5,
     }
+    release_artifacts = build_release_artifacts(result)
+    result["release_artifacts"] = release_artifacts
     result["passed"] = (
         claim1["passed"]
         and claim1_independent["passed"]
@@ -138,6 +141,7 @@ def main() -> int:
         and claim4["passed"]
         and claim5_independent["passed"]
         and claim5["passed"]
+        and release_artifacts["passed"]
     )
     Path(".openresearch/runtime").mkdir(parents=True, exist_ok=True)
     Path(".openresearch/runtime/latest.json").write_text(
