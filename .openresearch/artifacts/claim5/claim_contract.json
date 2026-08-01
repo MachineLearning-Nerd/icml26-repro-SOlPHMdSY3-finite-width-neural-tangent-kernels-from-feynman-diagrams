@@ -1,0 +1,8 @@
+{
+  "claim_id": 5,
+  "paper_statement": "For bias-free width-200 ReLU MLPs through layer 30, the ensemble-mean NTK scales linearly with depth at critical C_W=2 and is exponentially unstable away from criticality; Figure 1 uses 1000 initializations.",
+  "quantifier": "For the two fixed Appendix D inputs, layers 1 through 30, width 200, and 1000 iid Gaussian network initializations at each of C_W in {0.25, 2, 4}.",
+  "assumptions": ["no biases", "ReLU", "standard/book NTK parameterization", "iid centered Gaussian weights", "hidden width 200", "output-channel trace average permitted by Appendix C"],
+  "pass_condition": "At C_W=2 the diagonal slope agrees with ||x_0||^2/2 within 3 SE, max relative deviation is <=10%, at least 27/30 points lie within pointwise 99% intervals, diagonal R^2>=0.995 and depths 10-30 off-diagonal R^2>=0.98; C_W=4 has log-slope >=0.20, C_W=0.25 has log-slope <=-0.20, and the high curve is rejected by the critical contract; an independent tiny-network checker validates the estimator.",
+  "source": {"arxiv": "2508.11522v4", "anchors": ["sec:experiments", "fig:ntk_comparison", "eq:ntk_mc", "eq:ntk_trace_avg", "eq:x0_input", "eq:x1_input"], "source_tar_sha256": "5237b9fec2f128b23266771acbc8e44837619d5309cd32840ce537071b64c47f"}
+}

@@ -15,6 +15,8 @@ from reproduction.claim2_independent_checker import check
 from reproduction.claim2_verifier import verify
 from reproduction.claim3_independent_checker import check as check_claim3
 from reproduction.claim3_verifier import symbolic_certificate
+from reproduction.claim5_independent_checker import check as check_claim5
+from reproduction.claim5_stability import run_paper_scale
 
 
 def cgroup_cpu_metadata() -> dict:
@@ -37,7 +39,10 @@ def cpu_metadata() -> dict:
         affinity = len(os.sched_getaffinity(0))
     return {
         "core_estimate_before_run": 8,
-        "estimate_basis": "symbolic enumeration is single-core; cpu-upgrade is mandated",
+        "estimate_basis": (
+            "paper-scale Claim 5 uses all 8 vCPUs for batched JAX CPU matrix products; "
+            "estimated peak memory below 4 GB"
+        ),
         "selected_backend": "hf",
         "selected_flavor": "cpu-upgrade",
         "flavor_contract": {"vcpus": 8, "ram_gb": 32, "gpu": False},
@@ -74,6 +79,8 @@ def main() -> int:
     claim3 = symbolic_certificate()
     claim3_independent = check_claim3()
     claim3_negative = run_expected_failure("reproduction.claim3_negative_control")
+    claim5_independent = check_claim5()
+    claim5 = run_paper_scale()
     elapsed = time.perf_counter() - started
     result = {
         "schema_version": 1,
@@ -95,6 +102,8 @@ def main() -> int:
         "claim3_verifier": claim3,
         "claim3_independent_checker": claim3_independent,
         "claim3_negative_control": claim3_negative,
+        "claim5_independent_checker": claim5_independent,
+        "claim5_verifier": claim5,
     }
     result["passed"] = (
         claim1["passed"]
@@ -105,6 +114,8 @@ def main() -> int:
         and claim3["passed"]
         and claim3_independent["passed"]
         and claim3_negative["passed"]
+        and claim5_independent["passed"]
+        and claim5["passed"]
     )
     Path(".openresearch/runtime").mkdir(parents=True, exist_ok=True)
     Path(".openresearch/runtime/latest.json").write_text(
@@ -124,9 +135,12 @@ def main() -> int:
         if claim3["passed"] and claim3_independent["passed"] and claim3_negative["passed"]
         else "BLOCKED"
     )
+    claim5_status = (
+        "VERIFIED" if claim5_independent["passed"] and claim5["passed"] else "BLOCKED"
+    )
     print(
         f"SUMMARY claim1={claim1_status} claim2={claim2_status} "
-        f"claim3={claim3_status}"
+        f"claim3={claim3_status} claim5={claim5_status}"
     )
     return 0 if result["passed"] else 1
 
