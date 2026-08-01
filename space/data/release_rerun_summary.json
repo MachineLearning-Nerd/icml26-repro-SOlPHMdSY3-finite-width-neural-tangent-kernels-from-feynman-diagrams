@@ -1,0 +1,18 @@
+{
+  "run_id": "7a120817-70c1-459e-87ff-bdb96cca0e91",
+  "git_sha": "0955d05f3d38f60adc356c3ea8fcf4fce3adb2b2",
+  "fixed_command": "uv sync --frozen --all-extras && uv run --frozen python -m reproduction.run_all",
+  "backend": "hf",
+  "flavor": "cpu-upgrade",
+  "estimated_cpu_cores": 8,
+  "actual_cgroup_cpu_quota": 8.0,
+  "ram_contract_gb": 32,
+  "gpu": false,
+  "scientific_runtime_seconds": 5363.6862576100975,
+  "scheduler_wall_time": "3h02m",
+  "claim_status": {"claim1": "VERIFIED", "claim2": "VERIFIED", "claim3": "VERIFIED", "claim4": "VERIFIED", "claim5": "VERIFIED"},
+  "independent_rerun_maximum_combined_standard_error_z": {"claim3": 0.0, "claim4": 0.0, "claim5": 0.0},
+  "rerun_z_threshold": 5.0,
+  "raw_snapshot_sha256": "40df913db734bc65b7b4da5913f929e1be9a49d71b30d91caac6fcb80a790a52",
+  "passed": true
+}

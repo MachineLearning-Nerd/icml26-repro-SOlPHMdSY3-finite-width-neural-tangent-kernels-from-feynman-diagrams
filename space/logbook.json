@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "title": "Finite-width NTK: claim-by-claim reproduction",
+  "emoji": "🎯",
+  "space_id": "DineshAI/SOlPHMdSY3",
+  "paper": "2508.11522",
+  "tags": ["icml2026-repro", "paper-SOlPHMdSY3"],
+  "updated_at": "2026-08-01T18:00:00+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Current cumulative verification",
+    "file": "pages/index.md",
+    "children": [
+      {"slug": "claim-1", "title": "Claim 1 — VERIFIED", "file": "pages/claim-1.md", "children": []},
+      {"slug": "claim-2", "title": "Claim 2 — VERIFIED", "file": "pages/claim-2.md", "children": []},
+      {"slug": "claim-3", "title": "Claim 3 — VERIFIED", "file": "pages/claim-3.md", "children": []},
+      {"slug": "claim-4", "title": "Claim 4 — VERIFIED", "file": "pages/claim-4.md", "children": []},
+      {"slug": "claim-5", "title": "Claim 5 — VERIFIED", "file": "pages/claim-5.md", "children": []},
+      {"slug": "method", "title": "Method and limitations", "file": "pages/method.md", "children": []},
+      {"slug": "release", "title": "Release audit", "file": "pages/release.md", "children": []},
+      {"slug": "historical-rejected-baseline", "title": "Historical rejected baseline", "file": "pages/historical-rejected-baseline/index.md", "children": []}
+    ]
+  },
+  "revision": "candidate-release-gate"
+}
