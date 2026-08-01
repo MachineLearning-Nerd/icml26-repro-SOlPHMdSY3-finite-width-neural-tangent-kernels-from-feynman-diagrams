@@ -14,6 +14,8 @@ from reproduction.claim1_verifier import verify as verify_claim1
 from reproduction.claim2_independent_checker import check
 from reproduction.claim2_verifier import verify
 from reproduction.claim3_independent_checker import check as check_claim3
+from reproduction.claim3_empirical_independent_checker import check as check_claim3_empirical
+from reproduction.claim3_paper_scale import run_five_million_scale
 from reproduction.claim3_verifier import symbolic_certificate
 from reproduction.claim4_gelu import run_gelu_correction
 from reproduction.claim4_independent_checker import check as check_claim4
@@ -42,8 +44,9 @@ def cpu_metadata() -> dict:
     return {
         "core_estimate_before_run": 8,
         "estimate_basis": (
-            "paper-scale Claims 4 and 5 use all 8 vCPUs for batched JAX CPU matrix "
-            "products; estimated peak memory below 8 GB"
+            "five-million-sample Claim 3 plus paper-scale Claims 4 and 5 use all "
+            "8 vCPUs for batched JAX CPU matrix products; estimated peak memory "
+            "below 8 GB"
         ),
         "selected_backend": "hf",
         "selected_flavor": "cpu-upgrade",
@@ -85,6 +88,11 @@ def main() -> int:
     claim5 = run_paper_scale()
     claim4_independent = check_claim4()
     claim4 = run_gelu_correction()
+    claim3_empirical_independent = check_claim3_empirical()
+    claim3_empirical_negative = run_expected_failure(
+        "reproduction.claim3_empirical_negative_control"
+    )
+    claim3_empirical = run_five_million_scale()
     elapsed = time.perf_counter() - started
     result = {
         "schema_version": 1,
@@ -106,6 +114,9 @@ def main() -> int:
         "claim3_verifier": claim3,
         "claim3_independent_checker": claim3_independent,
         "claim3_negative_control": claim3_negative,
+        "claim3_empirical_independent_checker": claim3_empirical_independent,
+        "claim3_empirical_negative_control": claim3_empirical_negative,
+        "claim3_empirical_verifier": claim3_empirical,
         "claim4_independent_checker": claim4_independent,
         "claim4_verifier": claim4,
         "claim5_independent_checker": claim5_independent,
@@ -120,6 +131,9 @@ def main() -> int:
         and claim3["passed"]
         and claim3_independent["passed"]
         and claim3_negative["passed"]
+        and claim3_empirical_independent["passed"]
+        and claim3_empirical_negative["passed"]
+        and claim3_empirical["passed"]
         and claim4_independent["passed"]
         and claim4["passed"]
         and claim5_independent["passed"]
@@ -140,7 +154,14 @@ def main() -> int:
     )
     claim3_status = (
         "VERIFIED"
-        if claim3["passed"] and claim3_independent["passed"] and claim3_negative["passed"]
+        if (
+            claim3["passed"]
+            and claim3_independent["passed"]
+            and claim3_negative["passed"]
+            and claim3_empirical_independent["passed"]
+            and claim3_empirical_negative["passed"]
+            and claim3_empirical["passed"]
+        )
         else "BLOCKED"
     )
     claim5_status = (
