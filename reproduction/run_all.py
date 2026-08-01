@@ -113,8 +113,21 @@ def main() -> int:
     print("OPENRESEARCH_EVIDENCE_BEGIN")
     print(json.dumps(result, indent=2, sort_keys=True))
     print("OPENRESEARCH_EVIDENCE_END")
-    status = "VERIFIED" if result["passed"] else "BLOCKED"
-    print(f"SUMMARY claim1={status} claim2={status} claim3={status}")
+    claim1_status = "VERIFIED" if claim1["passed"] and claim1_independent["passed"] else "BLOCKED"
+    claim2_status = (
+        "VERIFIED"
+        if certificate["passed"] and independent["passed"] and negative_control["passed"]
+        else "BLOCKED"
+    )
+    claim3_status = (
+        "VERIFIED"
+        if claim3["passed"] and claim3_independent["passed"] and claim3_negative["passed"]
+        else "BLOCKED"
+    )
+    print(
+        f"SUMMARY claim1={claim1_status} claim2={claim2_status} "
+        f"claim3={claim3_status}"
+    )
     return 0 if result["passed"] else 1
 
 

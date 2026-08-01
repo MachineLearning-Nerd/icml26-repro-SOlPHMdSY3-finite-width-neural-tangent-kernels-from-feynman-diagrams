@@ -30,7 +30,7 @@ def symbolic_certificate() -> dict:
             value == 0 for value in vanishing_sources.values()
         ),
         "only_same_order_previous_layer_correction_survives": (
-            propagation == Cw * A * theta_correction
+            sp.simplify(propagation - Cw * A * theta_correction) == 0
         ),
         "zero_base_closes_induction_for_every_depth_and_order": (
             propagation.subs(theta_correction, 0) == 0
