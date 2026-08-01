@@ -1,0 +1,7 @@
+{
+  "claim_id": 4,
+  "source_faithful_statement": "For a four-layer GeLU MLP, sampled NTK means using 100000 initializations agree closely with the finite-width corrected recursion at hidden widths above 20.",
+  "judge_wording_discrepancy": "The imported judge wording says four-layer ReLU and 5e6 initializations. In v4, those describe the separate diagonal no-correction experiment in Figure 3; the recursion-correction experiment is GeLU with 1e5 NTK samples in Figure 2 and Appendix D.",
+  "pass_condition": "At widths 32, 56, 100, and 220, every fresh diagonal and off-diagonal mean is closer to the pre-existing source-PDF first-order prediction than to infinite width, every residual is at most half the first-order signal, the median residual ratio is at most 0.25, and the infinite-width substitution fails.",
+  "source": {"arxiv": "2508.11522v4", "anchors": ["sec:experiments", "fig:kernel_finite_width_corrected", "fig:both_kernels_finite_width_corrected_diagonal", "eq:ntk_trace_avg"], "source_tar_sha256": "5237b9fec2f128b23266771acbc8e44837619d5309cd32840ce537071b64c47f"}
+}

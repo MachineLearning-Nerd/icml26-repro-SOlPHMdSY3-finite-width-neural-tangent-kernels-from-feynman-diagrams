@@ -15,6 +15,8 @@ from reproduction.claim2_independent_checker import check
 from reproduction.claim2_verifier import verify
 from reproduction.claim3_independent_checker import check as check_claim3
 from reproduction.claim3_verifier import symbolic_certificate
+from reproduction.claim4_gelu import run_gelu_correction
+from reproduction.claim4_independent_checker import check as check_claim4
 from reproduction.claim5_independent_checker import check as check_claim5
 from reproduction.claim5_stability import run_paper_scale
 
@@ -40,8 +42,8 @@ def cpu_metadata() -> dict:
     return {
         "core_estimate_before_run": 8,
         "estimate_basis": (
-            "paper-scale Claim 5 uses all 8 vCPUs for batched JAX CPU matrix products; "
-            "estimated peak memory below 4 GB"
+            "paper-scale Claims 4 and 5 use all 8 vCPUs for batched JAX CPU matrix "
+            "products; estimated peak memory below 8 GB"
         ),
         "selected_backend": "hf",
         "selected_flavor": "cpu-upgrade",
@@ -81,6 +83,8 @@ def main() -> int:
     claim3_negative = run_expected_failure("reproduction.claim3_negative_control")
     claim5_independent = check_claim5()
     claim5 = run_paper_scale()
+    claim4_independent = check_claim4()
+    claim4 = run_gelu_correction()
     elapsed = time.perf_counter() - started
     result = {
         "schema_version": 1,
@@ -102,6 +106,8 @@ def main() -> int:
         "claim3_verifier": claim3,
         "claim3_independent_checker": claim3_independent,
         "claim3_negative_control": claim3_negative,
+        "claim4_independent_checker": claim4_independent,
+        "claim4_verifier": claim4,
         "claim5_independent_checker": claim5_independent,
         "claim5_verifier": claim5,
     }
@@ -114,6 +120,8 @@ def main() -> int:
         and claim3["passed"]
         and claim3_independent["passed"]
         and claim3_negative["passed"]
+        and claim4_independent["passed"]
+        and claim4["passed"]
         and claim5_independent["passed"]
         and claim5["passed"]
     )
@@ -138,9 +146,12 @@ def main() -> int:
     claim5_status = (
         "VERIFIED" if claim5_independent["passed"] and claim5["passed"] else "BLOCKED"
     )
+    claim4_status = (
+        "VERIFIED" if claim4_independent["passed"] and claim4["passed"] else "BLOCKED"
+    )
     print(
         f"SUMMARY claim1={claim1_status} claim2={claim2_status} "
-        f"claim3={claim3_status} claim5={claim5_status}"
+        f"claim3={claim3_status} claim4={claim4_status} claim5={claim5_status}"
     )
     return 0 if result["passed"] else 1
 
