@@ -1,0 +1,19 @@
+{
+  "run_id": "5e1f479a-664c-49fe-974c-38b4c616a17d",
+  "git_sha": "86d488165be836bba6a52b2c1a25704a24d3390d",
+  "job_duration_seconds": 16,
+  "verifier_runtime_seconds": 0.03723889100365341,
+  "selected_flavor": "cpu-upgrade",
+  "provider_flavor_vcpus": 8,
+  "provider_flavor_ram_gb": 32,
+  "accelerator": null,
+  "observed_host_cpu_count": 64,
+  "nvidia_smi_present": false,
+  "cuda_visible_devices_name_present": false,
+  "certificate_sha256": "3e60f600b5a623dbf3f5301bc1c59d848c12a4a95c1742ee26f34abf91ae7141",
+  "diagram_ids": ["delta_omega:K1", "delta_omega:V", "sigma_prime_pair:D", "sigma_prime_pair:F", "sigma_prime_pair:Theta1"],
+  "positive_verifier_passed": true,
+  "independent_checker_passed": true,
+  "negative_control": {"mutation": "drop F", "diagram_count": 4, "exit_code": 1, "passed": true},
+  "verdict": "VERIFIED"
+}

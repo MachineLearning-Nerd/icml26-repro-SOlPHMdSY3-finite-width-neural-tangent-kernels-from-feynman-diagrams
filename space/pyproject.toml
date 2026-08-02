@@ -1,0 +1,16 @@
+[project]
+name = "finite-width-ntk-reproduction"
+version = "0.1.0"
+description = "CPU-only claim-by-claim reproduction of arXiv:2508.11522"
+requires-python = "==3.11.*"
+dependencies = [
+    "jax[cpu]==0.4.38",
+    "marimo>=0.14,<1",
+    "matplotlib>=3.10,<4",
+    "numpy>=2.2,<3",
+    "scipy>=1.15,<2",
+    "sympy>=1.14,<2",
+]
+
+[tool.uv]
+package = false

@@ -1,0 +1,8 @@
+{
+  "claim_id": 1,
+  "paper_statement": "The Section 4 graphical rules provide an executable shorthand for layer-wise order-1/n NTK-statistic recursions.",
+  "assumptions": ["MLP cumulant expansion at order 1/n", "Section 4 rules (i)-(v)", "D/F/A/B rank-four decomposition"],
+  "pass_condition": "All four external quartic signatures are covered; applying the channel-equality and propagator rules to F yields exactly the direct and recursively propagated terms of equation (6); an invalid unpaired-color candidate is rejected; an independent structural checker passes.",
+  "scope_note": "This contract verifies the judge's descriptive rule/recursion claim and one complete nontrivial F derivation. It does not claim an independent re-proof of every all-orders theorem.",
+  "source": {"arxiv": "2508.11522v4", "anchors": ["S4.SS1", "S4.E7", "S4.E11"], "source_tar_sha256": "5237b9fec2f128b23266771acbc8e44837619d5309cd32840ce537071b64c47f"}
+}
