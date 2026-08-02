@@ -2,7 +2,7 @@
 
 ![GeLU finite-width correction](../reports/reproduction/images/claim4_gelu_correction.svg)
 
-## Source clarification and exact contract
+## Source clarification and exact source contract
 
 The imported judge wording conflated two v4 experiments. The actual Section 6
 Figure 2 uses a four-layer **GeLU** MLP, `C_W=1.98305826`, 100,000 samples per

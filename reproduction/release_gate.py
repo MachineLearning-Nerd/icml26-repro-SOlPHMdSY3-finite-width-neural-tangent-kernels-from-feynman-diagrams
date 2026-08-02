@@ -95,7 +95,19 @@ def verify_allowlist() -> dict:
         "destinations_unique": len(destinations) == len(set(destinations)),
         "text_extensions_only": all(
             Path(destination).suffix.lower()
-            in {"", ".css", ".html", ".js", ".json", ".md", ".py", ".svg", ".toml", ".lock"}
+            in {
+                "",
+                ".css",
+                ".html",
+                ".js",
+                ".json",
+                ".lock",
+                ".md",
+                ".py",
+                ".sha256",
+                ".svg",
+                ".toml",
+            }
             for destination in destinations
         ),
         "hashes_match": all(
